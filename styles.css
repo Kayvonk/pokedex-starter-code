@@ -1,0 +1,827 @@
+@font-face {
+  font-family: 'EarlyGameBoy';
+  src: url('Early_GameBoy.ttf') format('truetype');
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #222;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#volumeBar {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+#volumeBar.visible {
+  opacity: 1;
+}
+
+#volumeBarTrack {
+  width: 150px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+#volumeBarFill {
+  height: 100%;
+  background: white;
+  border-radius: 3px;
+  transition: width 0.15s;
+}
+
+/* MAIN WRAPPER */
+.pokedex {
+  display: flex;
+  width: 900px;
+  height: 700px;
+}
+
+/* LEFT PANEL */
+.left-panel {
+  flex: 1;
+  border-radius: 25px 0 0 25px;
+  padding: 25px;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* RIGHT PANEL */
+.right-panel-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  animation: revealContent 1.4s 0.2s both;
+}
+
+.bottom-controls {
+  display: flex;
+  gap: 15px;
+  width: 80%;
+  margin-top: 15px;
+  align-items: flex-start;
+}
+
+.bottom-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bottom-row1 {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.bottom-row2 {
+  display: flex;
+}
+
+#cryBtn {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #333;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 5px 0 #1a1a1a;
+}
+
+#cryBtn::after {
+  content: '';
+  position: absolute;
+  top: 18%;
+  left: 18%;
+  width: 36%;
+  height: 24%;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  transform: rotate(-30deg);
+  pointer-events: none;
+}
+
+#cryBtn:not(:disabled):active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #1a1a1a;
+}
+
+#cryBtn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+#volDownBtn, #volUpBtn {
+  flex: 1;
+  padding: 6px 4px;
+  border-radius: 8px;
+  border: none;
+  background-color: #222;
+  color: white;
+  cursor: pointer;
+}
+
+#voiceSelect, #langSelect {
+  width: 100%;
+  padding: 4px 6px;
+  border-radius: 8px;
+  border: none;
+  background-color: #222;
+  color: white;
+  cursor: pointer;
+}
+
+.bottom-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* D-PAD */
+.dpad {
+  display: grid;
+  grid-template-columns: 34px 34px 34px;
+  grid-template-rows: 34px 34px 34px;
+}
+
+.dpad-btn {
+  background: #222;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dpad-btn:active {
+  background: #333;
+}
+
+.dpad-up    { grid-column: 2; grid-row: 1; border-radius: 6px 6px 0 0; }
+.dpad-left  { grid-column: 1; grid-row: 2; border-radius: 6px 0 0 6px; }
+.dpad-right { grid-column: 3; grid-row: 2; border-radius: 0 6px 6px 0; }
+.dpad-down  { grid-column: 2; grid-row: 3; border-radius: 0 0 6px 6px; }
+
+.dpad-center {
+  grid-column: 2;
+  grid-row: 2;
+  background: #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.dpad-center-dot {
+  width: 16px;
+  height: 16px;
+  background: #444;
+  border-radius: 50%;
+}
+
+.dpad-up::after {
+  content: '';
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 8px solid #555;
+}
+
+.dpad-down::after {
+  content: '';
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 8px solid #555;
+}
+
+.dpad-left::after {
+  content: '';
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 8px solid #555;
+}
+
+.dpad-right::after {
+  content: '';
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 8px solid #555;
+}
+
+.menu-buttons {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  width: 280px;
+}
+
+.storage-nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  width: 280px;
+  margin-top: 10px;
+}
+
+.storage-nav button {
+  width: 52px;
+  height: 8px;
+  background: #333;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 3px 0 #1a1a1a;
+}
+
+.storage-nav button:hover {
+  background: #555;
+}
+
+.storage-nav button:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #1a1a1a;
+}
+
+.storage-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 56px);
+  grid-template-rows: repeat(2, 30px);
+  gap: 0;
+  margin-top: 15px;
+}
+
+.storage-box {
+  width: 56px;
+  height: 30px;
+  border-radius: 3px;
+  background: #1a6fa8;
+  border: 1px solid #0e4870;
+  box-shadow: 0 4px 0 #0e3d5c;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+  position: relative;
+}
+
+.storage-box:hover {
+  background: #2288cc;
+}
+
+.storage-box.selected {
+  background: #2288cc;
+}
+
+.storage-box:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #0e3d5c;
+}
+
+
+.menu-nav-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0;
+  width: 100%;
+}
+
+.menu-nav-row button {
+  width: 56px;
+  height: 30px;
+  border-radius: 3px;
+  background-color: #bbb;
+  border: 1px solid #888;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #888;
+}
+
+.menu-nav-row button:not(#favoriteBtn):hover {
+  background-color: #ccc;
+}
+
+.menu-nav-row button:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #888;
+}
+
+#favoriteBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #f4c430;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  margin-left: auto;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+#favoriteBtn::after {
+  content: '';
+  position: absolute;
+  top: 16%;
+  left: 16%;
+  width: 38%;
+  height: 26%;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  transform: rotate(-30deg);
+  pointer-events: none;
+}
+
+#favoriteBtn.favorited {
+  background-color: #ff9100;
+  box-shadow: 0 0 8px 2px rgba(255, 145, 0, 0.6);
+}
+
+.menu-stat-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.stat-box {
+  width: 130px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background-color: #222;
+  color: white;
+  text-align: center;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.right-panel {
+  flex: 1;
+  border-radius: 0 25px 25px 0;
+  padding: 25px;
+  padding-top: 125px;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transform-origin: left center;
+  animation: bookOpen 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s both;
+}
+
+@keyframes bookOpen {
+  from {
+    transform: perspective(1200px) rotateY(-180deg);
+  }
+  to {
+    transform: perspective(1200px) rotateY(0deg);
+  }
+}
+
+/* SVG panel background */
+.panel-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+/* Top ornament container */
+.left-panel-top {
+  position: relative;
+  display: flex;
+  gap: 20px;
+}
+
+/* Decorative camera */
+.camera {
+  width: 50px;
+  height: 50px;
+  background: #00b4d8;
+  border-radius: 50%;
+  border: 5px solid white;
+  transition: background 0.1s, box-shadow 0.1s;
+  position: relative;
+  overflow: hidden;
+}
+
+.camera::after {
+  content: '';
+  position: absolute;
+  top: 16%;
+  left: 16%;
+  width: 38%;
+  height: 26%;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  transform: rotate(-30deg);
+  pointer-events: none;
+}
+
+.camera.flash {
+  background: #ffffff;
+  box-shadow: 0 0 24px 8px #00d4ff;
+}
+
+/* Decorative lights */
+.lights {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.light {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.55);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+  position: relative;
+  overflow: hidden;
+}
+
+.light::after {
+  content: '';
+  position: absolute;
+  top: 18%;
+  left: 18%;
+  width: 38%;
+  height: 26%;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  transform: rotate(-30deg);
+  pointer-events: none;
+}
+
+.red {
+  background: red;
+}
+
+.yellow {
+  background: yellow;
+}
+
+.green {
+  background: green;
+}
+
+/* LEFT PANEL BOTTOM CONTAINER */
+.left-panel-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  padding-top: 50px;
+}
+
+/* ========================= */
+/* SCREEN FRAME (FIXED) */
+/* ========================= */
+
+.screen-frame {
+  position: relative;
+  width: 300px;
+  aspect-ratio: 300 / 220; /* keeps correct proportions */
+}
+
+/* SVG background */
+.screen-frame-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  filter: drop-shadow(0 6px 0 #aaa);
+}
+
+/* INNER SCREEN (now positioned instead of padded) */
+@keyframes screenOn {
+  from { background: #111; }
+  to   { background: lightblue; }
+}
+
+.screen {
+  position: absolute;
+
+  top: 14%;
+  left: 7%;
+  right: 7%;
+  bottom: 18%;
+
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: screenOn 1s 1.6s both;
+}
+
+.screen img {
+  display: none;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+#screenText {
+  font-family: 'EarlyGameBoy', monospace;
+  font-size: 10px;
+  color: #333;
+  text-align: center;
+  padding: 10px;
+  line-height: 1.8;
+  opacity: 0;
+  animation: fadeIn 0.5s 2.6s forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  gap: 10px;
+  width: 80%;
+}
+
+.controls input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+}
+
+.controls button {
+  padding: 8px 15px;
+  border-radius: 8px;
+  border: none;
+  background: #222;
+  color: white;
+  cursor: pointer;
+}
+
+/* Hinge */
+.hinge {
+  width: 20px;
+  background: #a4161a;
+  border-radius: 10px;
+}
+
+/* Info screen */
+.info-screen {
+  background: #2a9d8f;
+  width: 80%;
+  height: 200px;
+  border-radius: 15px;
+  padding: 20px;
+  color: white;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.info-screen::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes revealContent {
+  0%, 27% {
+    opacity: 0;
+  }
+  28%, 100% {
+    opacity: 1;
+  }
+}
+
+.info-screen h2 {
+  margin-bottom: 15px;
+}
+
+.info-screen #pokemonDescription {
+  margin-bottom: 10px;
+}
+
+.info-screen p:has(#pokemonId),
+.info-screen p:has(#pokemonType) {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+
+/* Box view */
+#boxView {
+  width: 100%;
+}
+
+#boxViewHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+#boxViewTitle {
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+#boxViewCount {
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+#boxViewList {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.box-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.box-entry:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.box-entry-num {
+  font-size: 9px;
+  opacity: 0.55;
+  width: 14px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.box-entry img {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+
+.box-entry-name {
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+}
+
+.box-empty {
+  text-align: center;
+  opacity: 0.55;
+  font-size: 11px;
+  font-style: italic;
+  padding: 16px 0;
+}
+
+/* Nav arrows hidden on desktop */
+.nav-arrow {
+  display: none;
+}
+
+/* ========================= */
+/* MOBILE */
+/* ========================= */
+
+@media (max-width: 768px) {
+
+  body {
+    align-items: flex-start;
+    overflow: hidden;
+  }
+
+  .pokedex-viewport {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .pokedex {
+    width: 200vw;
+    height: 100vh;
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .left-panel {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    flex-shrink: 0;
+  }
+
+  .left-panel-content {
+    flex: 1;
+    justify-content: center;
+    margin-top: 0;
+  }
+
+  .right-panel {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    flex-shrink: 0;
+    padding-top: 30px;
+    align-items: center;
+    animation: none;
+  }
+
+  .right-panel-content {
+    animation: none;
+    justify-content: center;
+    height: 100%;
+  }
+
+  .info-screen {
+    margin-top: 100px;
+  }
+
+  .hinge {
+    display: none;
+  }
+
+  /* Responsive screen sizing */
+  .screen-frame {
+    width: calc(100vw - 140px);
+  }
+
+  .info-screen {
+    width: calc(100vw - 140px);
+    height: auto;
+    aspect-ratio: 300 / 220;
+  }
+
+  .nav-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    background: none;
+    border: none;
+    padding: 0;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  .nav-arrow-right {
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .nav-arrow-left {
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}

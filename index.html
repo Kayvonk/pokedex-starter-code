@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Kanto Pokédex</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="volumeBar">
+      <span id="volumeIcon">🔊</span>
+      <div id="volumeBarTrack">
+        <div id="volumeBarFill"></div>
+      </div>
+    </div>
+    <div class="pokedex-viewport">
+      <div class="pokedex">
+        <!-- LEFT PANEL -->
+        <div class="left-panel">
+          <svg
+            class="panel-bg"
+            viewBox="0 0 440 500"
+            preserveAspectRatio="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <rect width="440" height="500" fill="#d62828" />
+            <path
+              d="M0 0 L440 0 L440 60 L280 60 C240 60 160 120 110 120 L0 120 Z"
+              fill="#b71c1c"
+            />
+          </svg>
+
+          <div class="left-panel-top">
+            <div class="camera"></div>
+            <div class="lights">
+              <div class="light red"></div>
+              <div class="light yellow"></div>
+              <div class="light green"></div>
+            </div>
+          </div>
+
+          <button
+            class="nav-arrow nav-arrow-right"
+            aria-label="View info panel"
+          >
+            <svg viewBox="0 0 64 64" width="44" height="44">
+              <polyline points="14,12 54,34 14,56" fill="none" stroke="#1a1a1a" stroke-width="18" stroke-linejoin="round" stroke-linecap="butt"/>
+              <polyline points="12,10 52,32 12,54" fill="none" stroke="#666" stroke-width="18" stroke-linejoin="round" stroke-linecap="butt"/>
+            </svg>
+          </button>
+
+          <div class="left-panel-content">
+            <div class="screen-frame">
+              <svg
+                class="screen-frame-bg"
+                viewBox="0 0 300 220"
+                xmlns="http://www.w3.org/2000/svg"
+                preserveAspectRatio="none"
+              >
+                <path
+                  d="M20 0 H280 Q300 0 300 20 V200 Q300 220 280 220 H50 L0 190 V20 Q0 0 20 0 Z"
+                  fill="#ccc"
+                />
+                <!-- Two indicator dots top center -->
+                <circle cx="136" cy="11" r="5" fill="#d62828"/>
+                <circle cx="136" cy="11" r="2" fill="#ff6b6b"/>
+                <circle cx="164" cy="11" r="5" fill="#d62828"/>
+                <circle cx="164" cy="11" r="2" fill="#ff6b6b"/>
+                <!-- Red circle button bottom-left (shiny toggle) -->
+                <g id="shinyBtn" style="cursor:pointer">
+                  <circle cx="70" cy="199" r="10" fill="#b71c1c"/>
+                  <circle cx="70" cy="199" r="10" fill="none" stroke="#8a1010" stroke-width="1.5"/>
+                  <circle cx="66" cy="195" r="3.5" fill="rgba(255,255,255,0.3)"/>
+                </g>
+                <!-- Speaker slots bottom-right -->
+                <line x1="190" y1="191" x2="268" y2="191" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="190" y1="198" x2="268" y2="198" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="190" y1="205" x2="268" y2="205" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="190" y1="212" x2="268" y2="212" stroke="#333" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+              <div class="screen">
+                <img id="pokemonImage" src="" alt="" />
+                <p id="screenText">Select a Pokemon</p>
+              </div>
+            </div>
+
+            <div class="bottom-controls">
+              <div class="bottom-left">
+                <div class="bottom-row1">
+                  <button id="cryBtn" title="Play Pokémon cry"></button>
+                  <button id="volDownBtn">&#x1F50A;−</button>
+                  <button id="volUpBtn">&#x1F50A;+</button>
+                </div>
+                <div class="bottom-row2">
+                  <select id="voiceSelect"></select>
+                  <select id="langSelect"></select>
+                </div>
+              </div>
+              <div class="bottom-right">
+                <div class="dpad">
+                  <button class="dpad-btn dpad-up" id="dpadUp"></button>
+                  <button class="dpad-btn dpad-left" id="dpadLeft"></button>
+                  <div class="dpad-center"><div class="dpad-center-dot"></div></div>
+                  <button class="dpad-btn dpad-right" id="dpadRight"></button>
+                  <button class="dpad-btn dpad-down" id="dpadDown"></button>
+                </div>
+              </div>
+            </div>
+
+            <div class="controls">
+              <input
+                type="text"
+                id="pokemonInput"
+                placeholder="Enter name or ID"
+              />
+              <button id="searchBtn">Search</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- HINGE -->
+        <div class="hinge"></div>
+
+        <!-- RIGHT PANEL -->
+        <div class="right-panel">
+          <svg
+            class="panel-bg"
+            viewBox="0 0 440 500"
+            preserveAspectRatio="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0 60 L160 60 C200 60 280 120 330 120 L440 120 L440 500 L0 500 Z"
+              fill="#d62828"
+            />
+          </svg>
+
+          <div class="right-panel-content">
+            <button
+              class="nav-arrow nav-arrow-left"
+              aria-label="Back to Pokédex"
+            >
+              <svg viewBox="0 0 64 64" width="44" height="44">
+                <polyline points="50,12 10,34 50,56" fill="none" stroke="#1a1a1a" stroke-width="18" stroke-linejoin="round" stroke-linecap="butt"/>
+                <polyline points="52,10 12,32 52,54" fill="none" stroke="#666" stroke-width="18" stroke-linejoin="round" stroke-linecap="butt"/>
+              </svg>
+            </button>
+            <div class="info-screen">
+              <div id="pokemonView">
+                <h2 id="pokemonName">---</h2>
+                <p id="pokemonDescription">---</p>
+                <p><strong>ID:</strong> <span id="pokemonId">---</span></p>
+                <p><strong>Type:</strong> <span id="pokemonType">---</span></p>
+              </div>
+              <div id="boxView" style="display:none">
+                <div id="boxViewHeader">
+                  <span id="boxViewTitle"></span>
+                  <span id="boxViewCount"></span>
+                </div>
+                <div id="boxViewList"></div>
+              </div>
+            </div>
+
+            <div class="storage-grid" id="storageGrid">
+              <div class="storage-box" data-slot="0"></div>
+              <div class="storage-box" data-slot="1"></div>
+              <div class="storage-box" data-slot="2"></div>
+              <div class="storage-box" data-slot="3"></div>
+              <div class="storage-box" data-slot="4"></div>
+              <div class="storage-box" data-slot="5"></div>
+              <div class="storage-box" data-slot="6"></div>
+              <div class="storage-box" data-slot="7"></div>
+              <div class="storage-box" data-slot="8"></div>
+              <div class="storage-box" data-slot="9"></div>
+            </div>
+
+            <div class="storage-nav">
+              <button id="storagePrevBtn" aria-label="Previous storage page"></button>
+              <button id="storageNextBtn" aria-label="Next storage page"></button>
+            </div>
+
+            <div class="menu-buttons">
+              <div class="menu-nav-row">
+                <button id="prevBtn"></button>
+                <button id="nextBtn"></button>
+                <button id="favoriteBtn" aria-label="Favorite"></button>
+              </div>
+              <div class="menu-stat-row">
+                <div class="stat-box" id="pokemonHeight"></div>
+                <div class="stat-box" id="pokemonWeight"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
